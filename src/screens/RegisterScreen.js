@@ -1,56 +1,123 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView, Pressable, } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView, Pressable, KeyboardAvoidingView, } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { styles } from "../styles/registerStyles";
 import { colors } from "../styles/theme";
+import Field from "../components/Field";
+
+const EMPTY_FORM = {
+    name: '',
+    surname: '',
+    studentId: '',
+    username: '',
+    password: '',
+    confirm: '',
+}
 
 const RegisterScreen = () => {
+    const db = useSQLiteContext();
+
+    const [form, setForm] = useState(EMPTY_FORM);
+    const [errors, setErrors] = useState({});
+    const [saving, setSaving] = useState(false);
+    const [success, setSuccess] = useState('');
+
+    function setField(field, value) {
+        setForm((prev) => ({ ...prev, [field]: value }))
+
+        if (errors[field]) {
+            setErrors((prev) => {
+                const next = { ...prev }
+                delete next[field]
+                return next
+            })
+        }
+    }
+
+    async function handleSubmit() {
+        console.log('กด Submit แล้ว', form)
+    }
+
     return (
-        <View style={{flex: 1}}>
-            <Text style={styles.intro}>กรุณากรอกข้อมูลให้ครบทุกช่อง</Text>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
 
-            <View style={styles.row}>
-                <Field 
-                    style={styles.half}
-                    label="ชื่อ"
-                    placeholder="สมชาย"
-                />
-                <Field 
-                    style={styles.half}
-                    label="นามสกุล"
-                    placeholder="เข็มกัด"
-                />
-            </View>
-            <Field
-                label='รหัสนิสิต'
-                placeholder='6721651785'
-                keyboardType='number-pad'
-                maxLength={10}
-            />
-            <Field
-                label='ชื่อผู้ใช้'
-                placeholder='somchai'
-                hint='ห้ามซ้ำกับผู้ใช้อื่น'
-                autoCapitalize='none'
-                maxLength={20}
-            />
-            <Field
-                label='รหัสผ่าน'
-                hint='อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข'
-                placeholder='อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข'
-                secureTextEntry
-                autoCapitalize='none'
-            />
-            <Field
-                label='ยืนยันรหัสผ่าน'
-                placeholder='ยืนยันรหัสผ่าน'
-                secureTextEntry
-                autoCapitalize='none'
-            />
+            <ScrollView
+                contentContainerStyle={styles.content}
+                keyboardShouldPersistTaps='handled'
+            >
+                <Text style={styles.intro}>กรุณากรอกข้อมูลให้ครบทุกช่อง</Text>
 
-            <Pressable style={styles.submit}>
-                <Text style={styles.submitText}>ลงทะเบียน</Text>
-            </Pressable>
-        </View>
+                {success !== '' && (
+                    <View style={styles.notice}>
+                        <Text style={styles.noticeText}>{success}</Text>
+                    </View>
+                )}
+
+                <View style={styles.row}>
+                    <Field
+                        style={styles.half}
+                        label="ชื่อ"
+                        placeholder="สมชาย"
+                        value={form.name}
+                        onChangeText={(v) => setField('name', v)}
+                        error={errors.name}
+                    />
+                    <Field
+                        style={styles.half}
+                        label="นามสกุล"
+                        placeholder="เข็มกัด"
+                        value={form.surname}
+                        onChangeText={(v) => setField('surname', v)}
+                        error={errors.surname}
+                    />
+                </View>
+                <Field
+                    label='รหัสนิสิต'
+                    placeholder='6721651785'
+                    keyboardType='number-pad'
+                    maxLength={10}
+                    value={form.studentId}
+                    onChangeText={(v) => setField('student_id', v)}
+                    error={errors.studentId}
+                />
+                <Field
+                    label='ชื่อผู้ใช้'
+                    placeholder='somchai'
+                    hint='ห้ามซ้ำกับผู้ใช้อื่น'
+                    autoCapitalize='none'
+                    maxLength={20}
+                    value={form.username}
+                    onChangeText={(v) => setField('username', v)}
+                    error={errors.username}
+                />
+                <Field
+                    label='รหัสผ่าน'
+                    hint='อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข'
+                    placeholder='อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข'
+                    secureTextEntry
+                    autoCapitalize='none'
+                    value={form.password}
+                    onChangeText={(v) => setField('password', v)}
+                    error={errors.password}
+                />
+                <Field
+                    label='ยืนยันรหัสผ่าน'
+                    placeholder='ยืนยันรหัสผ่าน'
+                    secureTextEntry
+                    autoCapitalize='none'
+                    value={form.confirm}
+                    onChangeText={(v) => setField('confirm', v)}
+                    error={errors.confirm}
+                />
+
+                <Pressable style={[styles.submit, saving && styles.submitDisabled]}>
+                    <Text style={styles.submitText}>{saving ? 'กำลังลงบันทึก...' : 'ลงทะเบียน'}</Text>
+                </Pressable>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
+export default RegisterScreen;

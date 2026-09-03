@@ -4,13 +4,14 @@ import { StatusBar } from 'expo-status-bar';
 
 import {colors} from './src/styles/theme';
 import { DATABASE_NAME, initDb } from './src/db/database';
+import RegisterScreen from './src/screens/RegisterScreen';
 
 export default function App() {
   return (
     <SQLiteProvider databaseName={DATABASE_NAME} onInit={initDb}>
       <StatusBar style="light-content" />
       <View style={styles.container}>
-        <Text style={{ color: colors.green, fontSize: 18 }}>ฐานข้อมูลพร้อมแล้ว</Text>
+        <RegisterScreen />
       </View>
     </SQLiteProvider>
   );
