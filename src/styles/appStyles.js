@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { colors, topInset } from './theme';
 
-export const styles = StyleSheet.create({
+export const ss = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg },
 
   header: { paddingTop: topInset, paddingHorizontal: 20, paddingBottom: 12 },

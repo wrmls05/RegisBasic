@@ -4,6 +4,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { styles } from "../styles/registerStyles";
 import { colors } from "../styles/theme";
 import Field from "../components/Field";
+import { validateForm, hasErrors } from "../utils/validate";
 
 const EMPTY_FORM = {
     name: '',
@@ -36,6 +37,14 @@ const RegisterScreen = () => {
 
     async function handleSubmit() {
         console.log('กด Submit แล้ว', form)
+
+        const found = validateForm(form)
+        if(hasErrors(found)) {
+            setErrors(found)
+            return
+        }
+
+        console.log('ไม่มี error ปรากฏ พร้อมบันทึก', form)
     }
 
     return (
@@ -80,7 +89,7 @@ const RegisterScreen = () => {
                     keyboardType='number-pad'
                     maxLength={10}
                     value={form.studentId}
-                    onChangeText={(v) => setField('student_id', v)}
+                    onChangeText={(v) => setField('studentId', v)}
                     error={errors.studentId}
                 />
                 <Field
@@ -96,7 +105,7 @@ const RegisterScreen = () => {
                 <Field
                     label='รหัสผ่าน'
                     hint='อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข'
-                    placeholder='อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข'
+                    placeholder='อย่างน้อย 8 ตัว'
                     secureTextEntry
                     autoCapitalize='none'
                     value={form.password}
@@ -113,7 +122,11 @@ const RegisterScreen = () => {
                     error={errors.confirm}
                 />
 
-                <Pressable style={[styles.submit, saving && styles.submitDisabled]}>
+                <Pressable
+                    style={[styles.submit, saving && styles.submitDisabled]}
+                    onPress={handleSubmit}
+                    disabled={saving}
+                >
                     <Text style={styles.submitText}>{saving ? 'กำลังลงบันทึก...' : 'ลงทะเบียน'}</Text>
                 </Pressable>
             </ScrollView>

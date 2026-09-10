@@ -1,4 +1,15 @@
+import * as Crypto from 'expo-crypto'
+
 export const DATABASE_NAME = 'register_basic.db';
+
+async function hashPassword(password, salt) {
+    return await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        salt + password
+    )
+}
+
+
 
 export async function initDb(db){
     await db.execAsync(`
@@ -21,4 +32,15 @@ export function listStudents(db){
         AS hash_review FROM students ORDER BY id DESC 
         
         `)
+}
+
+export async function findDuplicate(db, studentId, username) {
+    const row = await db.getFirstAsync(
+        'SELECT student_id, username FROM students WHERE student_id = ? OR username = ?', [studentId, username]
+    )
+
+    if(!row) return null
+    if(row.student_id === studentId) return 'studentId'
+    return 'username'
+    
 }

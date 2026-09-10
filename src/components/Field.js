@@ -2,10 +2,10 @@ import { View, Text, TextInput } from "react-native";
 import { styles } from '../styles/fieldStyles';
 import { colors } from "../styles/theme";
 
-const Field = ({ lebel, hint, error, style, ...inputProps }) => {
+const Field = ({ label, hint, error, style, ...inputProps }) => {
     return(
         <View style={[styles.container, style]}>
-            <Text style={styles.lebel}>{lebel}</Text>
+            <Text style={styles.label}>{label}</Text>
             <TextInput
                 style={[styles.input, error && styles.inputError]}
                 placeholderTextColor={colors.dim}
