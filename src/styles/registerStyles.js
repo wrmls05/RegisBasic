@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { colors } from './theme';
 
 export const styles = StyleSheet.create({
-  content: { padding: 20, paddingBottom: 40 },
+  content: { padding: 10, paddingBottom: 20 },
   intro: { color: colors.dim, fontSize: 14, marginBottom: 18 },
 
   field: { marginBottom: 14 },
