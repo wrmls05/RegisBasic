@@ -5,6 +5,7 @@ import { styles } from "../styles/registerStyles";
 import { colors } from "../styles/theme";
 import Field from "../components/Field";
 import { validateForm, hasErrors } from "../utils/validate";
+import { registerStudent } from "../db/database";
 
 const EMPTY_FORM = {
     name: '',
@@ -45,6 +46,28 @@ const RegisterScreen = () => {
         }
 
         console.log('ไม่มี error ปรากฏ พร้อมบันทึก', form)
+
+        setSaving(true)
+
+        const result = await registerStudent(db, {
+            name: form.name.trim(),
+            surname: form.surname.trim(),
+            studentId: form.studentId.trim(),
+            username: form.username.trim(),
+            password: form.password
+        })
+
+        setSaving(false)
+
+        if(!result.ok){
+            if(result.field) setErrors({ [result.field]: result.message })
+            else Alert.alert('ผิดพลาด', result.message)
+            return
+        }
+
+        setForm(EMPTY_FORM)
+        setErrors({})
+        setSuccess(`ลงทะเบียนสำเร็จ หมายเลขในระบบคือ ${result.id}`)
     }
 
     return (

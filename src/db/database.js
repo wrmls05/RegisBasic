@@ -1,4 +1,5 @@
 import * as Crypto from 'expo-crypto'
+import { register } from 'react-native/types_generated/Libraries/Renderer/shims/ReactNativeViewConfigRegistry';
 
 export const DATABASE_NAME = 'register_basic.db';
 
@@ -42,5 +43,39 @@ export async function findDuplicate(db, studentId, username) {
     if(!row) return null
     if(row.student_id === studentId) return 'studentId'
     return 'username'
+}
+
+export async function registerStudent(db, {name, surname, studentId, username, password}) {
+    const duplicate = await findDuplicate(db, studentId, username)
+
+    if (duplicate === 'studentId') {
+        return {ok: false, field: 'studentId', message: 'รหัสนิสิตนี้ลงทะเบียนไปแล้ว'}
+    }
+    if (duplicate === 'username') {
+        return {ok: false, field: 'studentId', message: 'ชื่อนร่นิสิตนี้ลงทะเบียนไปแล้ว'}
+    }
     
+    const salt = Crypto.randomUUID()
+    const hash = await hashPassword(password, salt)
+
+    try {
+        const result = await db.runAsync(
+            `INSERT INTO students (name, surname, student_id, username, password_salt, password_hash, create_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,[name, surname, studentId, username, salt, hash, Date().toString()]
+        )
+        return {ok: true, id: result.lastInsertRowId}
+    }catch (e) {
+        console.warn('registerStudent ล้อเหลว',e)
+        return {ok: false, field: null, message: 'บันทึกไม่สำเร็จ กรุณาลองใหม่'}
+    }
+}
+
+export async function counstStudent(db) {
+    const row = await db.runAsync('SELECT COUNT(*) AS n FROM students')
+    return row?.n ?? 0
+}
+
+export async function counstStudent(db) {
+    const result = await db.runAsync('DELETE FROM students')
+    return result.changes
 }
