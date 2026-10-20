@@ -9,8 +9,6 @@ async function hashPassword(password, salt) {
     )
 }
 
-
-
 export async function initDb(db){
     await db.execAsync(`
         PRAGMA journal_mode = WAL;
@@ -109,4 +107,3 @@ export function getStudentById(db, id) {
         `SELECT id, name, surname, student_id, create_at FROM students WHERE id = ?`, [id]
     )
 }
-
