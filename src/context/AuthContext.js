@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, use } from "react";
 import { useSQLiteContext } from "expo-sqlite";
-
 import { loginStudent, getStudentById } from "../db/database";
 import { saveSession, loadSession, clearSession } from "../utils/session";
 
