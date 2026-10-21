@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { View, Text, FlatList, Alert, Pressable } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
-
 import { listStudents } from "../db/database";
 import { styles } from "../styles/studentListStyles";
 
