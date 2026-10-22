@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView, Pressable, KeyboardAvoidingView, } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, 
+ScrollView, Pressable, KeyboardAvoidingView, } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { styles } from "../styles/registerStyles";
 import { colors } from "../styles/theme";
@@ -20,10 +21,8 @@ const RegisterScreen = ({onRegistered}) => {
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [success, setSuccess] = useState('');
-
     function setField(field, value) {
         setForm((prev) => ({ ...prev, [field]: value }))
-
         if (errors[field]) {
             setErrors((prev) => {
                 const next = { ...prev }
@@ -32,19 +31,15 @@ const RegisterScreen = ({onRegistered}) => {
             })
         }
     }
-
     async function handleSubmit() {
         console.log('กด Submit แล้ว', form)
-
         const found = validateForm(form)
         if(hasErrors(found)) {
             setErrors(found)
             return
         }
         console.log('ไม่มี error ปรากฏ พร้อมบันทึก', form)
-
         setSaving(true)
-
         const result = await registerStudent(db, {
             name: form.name.trim(),
             surname: form.surname.trim(),
@@ -61,26 +56,23 @@ const RegisterScreen = ({onRegistered}) => {
         setForm(EMPTY_FORM)
         setErrors({})
         setSuccess(`ลงทะเบียนสำเร็จ หมายเลขในระบบคือ ${result.id}`)
+        onRegistered?.()
     }
-    
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-
             <ScrollView
                 contentContainerStyle={styles.content}
                 keyboardShouldPersistTaps='handled'
             >
                 <Text style={styles.intro}>กรุณากรอกข้อมูลให้ครบทุกช่อง</Text>
-
                 {success !== '' && (
                     <View style={styles.notice}>
                         <Text style={styles.noticeText}>{success}</Text>
                     </View>
                 )}
-
                 <View style={styles.row}>
                     <Field
                         style={styles.half}
@@ -137,7 +129,6 @@ const RegisterScreen = ({onRegistered}) => {
                     onChangeText={(v) => setField('confirm', v)}
                     error={errors.confirm}
                 />
-
                 <Pressable
                     style={[styles.submit, saving && styles.submitDisabled]}
                     onPress={handleSubmit}

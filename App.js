@@ -7,7 +7,6 @@ import { DATABASE_NAME, initDb } from './src/db/database';
 import RegisterScreen from './src/screens/RegisterScreen';
 import { ss } from "./src/styles/appStyles";
 import StudentListScreen from "./src/screens/StudentListScreen";
-
 export default function App() {
   return (
     <>
@@ -18,11 +17,9 @@ export default function App() {
     </>
   );
 }
-
 function Main() {
   const [tab, setTab] = useState('list')
-  const [reloadkey, setReloadKey] = useState(0)
-
+  const [reloadKey, setReloadKey] = useState(0)
   return (
     <View style={ss.container}>
       <View style={ss.header}>
@@ -41,19 +38,17 @@ function Main() {
           onPress={() => setTab('list')}
         />
       </View>
-
       {
         tab === 'register' ? (
           <RegisterScreen onRegistered={() => setReloadKey((k) => k + 1)} />
         ) : (
-          <StudentListScreen reloadkey={reloadkey} />
+          <StudentListScreen reloadKey={reloadKey} />
         )
       }
 
     </View>
   )
 }
-
 function TabButton({ label, active, onPress }) {
   return (
     <Pressable style={[ss.tab, active && ss.tabActive]} onPress={onPress}>
