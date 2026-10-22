@@ -2,7 +2,6 @@ export function validateForm({name, surname, studentId, username, password, conf
     const errors = {}
     if(name.trim() === '') errors.name = 'กรุณากรอกชื่อ'
     if(surname.trim() === '') errors.surname = 'กรุณากรอกนามสกุล'
-
     if(!/^\d{10}$/.test(studentId.trim())) errors.studentId = 'รหัสนิสิตต้องเป็นตัวเลข 10 หลัก'
     if(!/^[a-zA-Z0-9_]{4,20}$/.test(username.trim())) errors.username = 'ชื่อผู้ใช้ยาว 4-20 ตัว ใช้ได้เฉพาะ a-z A-Z 0-9 และ _'
     if(password.length < 8) {
