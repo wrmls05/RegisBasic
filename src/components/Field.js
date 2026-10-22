@@ -1,7 +1,6 @@
 import { View, Text, TextInput } from "react-native";
 import { styles } from '../styles/fieldStyles';
 import { colors } from "../styles/theme";
-
 const Field = ({ label, hint, error, style, ...inputProps }) => {
     return(
         <View style={[styles.container, style]}>
@@ -19,5 +18,4 @@ const Field = ({ label, hint, error, style, ...inputProps }) => {
         </View>
     )
 }
-
 export default Field;

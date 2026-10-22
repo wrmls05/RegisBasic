@@ -6,7 +6,6 @@ import { colors } from "../styles/theme";
 import Field from "../components/Field";
 import { validateForm, hasErrors } from "../utils/validate";
 import { registerStudent } from "../db/database";
-
 const EMPTY_FORM = {
     name: '',
     surname: '',
@@ -15,10 +14,8 @@ const EMPTY_FORM = {
     password: '',
     confirm: '',
 }
-
 const RegisterScreen = ({onRegistered}) => {
     const db = useSQLiteContext();
-
     const [form, setForm] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
@@ -44,7 +41,6 @@ const RegisterScreen = ({onRegistered}) => {
             setErrors(found)
             return
         }
-
         console.log('ไม่มี error ปรากฏ พร้อมบันทึก', form)
 
         setSaving(true)
@@ -56,20 +52,17 @@ const RegisterScreen = ({onRegistered}) => {
             username: form.username.trim(),
             password: form.password
         })
-
         setSaving(false)
-
         if(!result.ok){
             if(result.field) setErrors({ [result.field]: result.message })
             else Alert.alert('ผิดพลาด', result.message)
             return
         }
-
         setForm(EMPTY_FORM)
         setErrors({})
         setSuccess(`ลงทะเบียนสำเร็จ หมายเลขในระบบคือ ${result.id}`)
     }
-
+    
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}

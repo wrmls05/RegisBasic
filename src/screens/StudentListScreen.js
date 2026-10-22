@@ -3,7 +3,6 @@ import { View, Text, FlatList, Alert, Pressable } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { listStudents } from "../db/database";
 import { styles } from "../styles/studentListStyles";
-
 export default function StudentListScreen(reloadKey) {
     const db = useSQLiteContext()
     const [rows, setRows] = useState([])
@@ -66,4 +65,3 @@ export default function StudentListScreen(reloadKey) {
         />
     )
 }
-

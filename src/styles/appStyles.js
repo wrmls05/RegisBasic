@@ -1,12 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { colors, topInset } from './theme';
-
 export const ss = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg },
-
   header: { paddingTop: topInset, paddingHorizontal: 20, paddingBottom: 12 },
   title: { color: colors.text, fontSize: 24, fontWeight: '800' },
-
   tabs: {
     flexDirection: 'row',
     gap: 8,

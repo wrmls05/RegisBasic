@@ -2,14 +2,11 @@ import { act, useState } from "react";
 import { SQLiteProvider } from "expo-sqlite";
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-
 import { colors } from './src/styles/theme';
 import { DATABASE_NAME, initDb } from './src/db/database';
 import RegisterScreen from './src/screens/RegisterScreen';
 import { ss } from "./src/styles/appStyles";
-
 import StudentListScreen from "./src/screens/StudentListScreen";
-import { styles } from "./src/styles/registerStyles";
 
 export default function App() {
   return (

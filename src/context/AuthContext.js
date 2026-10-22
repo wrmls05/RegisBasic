@@ -2,15 +2,11 @@ import { createContext, useContext, useState, useEffect, use } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { loginStudent, getStudentById } from "../db/database";
 import { saveSession, loadSession, clearSession } from "../utils/session";
-
 const AuthContext = createContext(null)
-
 export function AuthProvider({ children }) {
     const db = useSQLiteContext()
-
     const [user, setUser] = useState(null)
     const [restoring, setRestoring] = useState(null)
-
     useEffect(() => {
         async function restore() {
             const id = loadSession()
@@ -23,7 +19,6 @@ export function AuthProvider({ children }) {
         }
         restore()
     }, [db])
-
     async function login(username, password) {
         const result = await loginStudent(db, username, password)
 
@@ -33,19 +28,16 @@ export function AuthProvider({ children }) {
         }
         return result
     }
-
     async function logout() {
         await clearSession()
         setUser(null)
     }
-    
     return(
         <AuthContext.Provider value={{user, restoring, login, logout}}>
             {children}
         </AuthContext.Provider>
     )
 }
-
 export function useAuth(){
     const ctx = useContext(AuthContext)
     if(ctx == null) {

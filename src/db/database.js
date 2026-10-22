@@ -1,14 +1,11 @@
 import * as Crypto from 'expo-crypto'
-
 export const DATABASE_NAME = 'register_basic.db';
-
 async function hashPassword(password, salt) {
     return await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
         salt + password
     )
 }
-
 export async function initDb(db){
     await db.execAsync(`
         PRAGMA journal_mode = WAL;
@@ -24,7 +21,6 @@ export async function initDb(db){
         );
     `);
 }
-
 export function listStudents(db){
     return db.getAllAsync(`
         SELECT id, name, surname, student_id, username, substr(password_hash, 1, 16)
@@ -32,7 +28,6 @@ export function listStudents(db){
         
     `)
 }
-
 export async function findDuplicate(db, studentId, username) {
     const row = await db.getFirstAsync(
         'SELECT student_id, username FROM students WHERE student_id = ? OR username = ?', [studentId, username]
@@ -42,7 +37,6 @@ export async function findDuplicate(db, studentId, username) {
     if(row.student_id === studentId) return 'studentId'
     return 'username'
 }
-
 export async function registerStudent(db, {name, surname, studentId, username, password}) {
     const duplicate = await findDuplicate(db, studentId, username)
 
@@ -67,29 +61,23 @@ export async function registerStudent(db, {name, surname, studentId, username, p
         return {ok: false, field: null, message: 'บันทึกไม่สำเร็จ กรุณาลองใหม่'}
     }
 }
-
 export async function countStudents(db) {
     const row = await db.getFirstAsync('SELECT COUNT(*) AS n FROM students')
     return row?.n ?? 0
 }
-
 export async function clearStudent(db) {
     const result = await db.runAsync('DELETE FROM students')
     return result.changes
 }
-
 export async function loginStudent(db, username, password) {
     const row = await db.getFirstAsync(
         `SELECT id, name, surname, student_id, username, password_salt, password_hash FROM
         students WHERE username = ?`, [username]
     )
-
     const fail = { ok: false, message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถุกต้อง' }
     if(!row) return fail
-
     const hash = await hashPassword(password, row.password_salt)
     if(hash !== row.password_hash) return fail
-
     return{
         ok: true,
         user: {
@@ -101,7 +89,6 @@ export async function loginStudent(db, username, password) {
         }
     }
 }
-
 export function getStudentById(db, id) {
     return db.getFirstAsync(
         `SELECT id, name, surname, student_id, create_at FROM students WHERE id = ?`, [id]
